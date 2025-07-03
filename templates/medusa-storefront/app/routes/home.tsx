@@ -11,7 +11,7 @@ import { ProductPrice } from "@/modules/products/product-price";
 
 import type { Route } from "./+types/home";
 
-export async function loader({ request }: Route.LoaderArgs) {
+export function loader({ request }: Route.LoaderArgs) {
   const productsResponse = listProductsWithSort(request);
   return { productsResponse };
 }

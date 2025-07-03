@@ -10,7 +10,7 @@ import { retrieveCart } from "@/lib/data/cart";
 
 import type { Route } from "./+types/main-layout";
 
-export async function loader({ request }: Route.LoaderArgs) {
+export function loader({ request }: Route.LoaderArgs) {
   const cart = retrieveCart(request);
   // const customer = await retrieveCustomer(request);
 
@@ -21,7 +21,6 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
   const { state } = useNavigation();
   const isNavigating = state === "loading";
   const { cart } = loaderData;
-  console.log(loaderData);
 
   return (
     <div className="container py-10">
