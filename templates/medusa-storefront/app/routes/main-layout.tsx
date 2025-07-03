@@ -1,25 +1,27 @@
-import { Outlet, useNavigation } from "react-router";
+import { Suspense } from "react";
+import { Await, Link, Outlet, useNavigation } from "react-router";
 
+import type { HttpTypes } from "@medusajs/types";
 import { ShoppingBag } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import { retrieveCart } from "@/lib/data/cart";
-import { retrieveCustomer } from "@/lib/data/customer";
 
 import type { Route } from "./+types/main-layout";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const cart = await retrieveCart(request);
-  const customer = await retrieveCustomer(request);
+  const cart = retrieveCart(request);
+  // const customer = await retrieveCustomer(request);
 
-  return { cart, customer };
+  return { cart };
 }
 
 export default function MainLayout({ loaderData }: Route.ComponentProps) {
   const { state } = useNavigation();
   const isNavigating = state === "loading";
-  const {} = loaderData;
+  const { cart } = loaderData;
+  console.log(loaderData);
 
   return (
     <div className="container py-10">
@@ -28,11 +30,29 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
       )}
 
       <header className="flex justify-end">
-        <Button variant="secondary" size="icon">
-          <ShoppingBag />
+        <Button asChild className="relative" variant="secondary" size="icon">
+          <Link to="/cart">
+            <ShoppingBag />
+            <Suspense fallback={null}>
+              <Await resolve={cart}>
+                {(value) => <CartCount cart={value as HttpTypes.StoreCart} />}
+              </Await>
+            </Suspense>
+          </Link>
         </Button>
       </header>
       <Outlet />
+    </div>
+  );
+}
+
+function CartCount({ cart }: { cart: HttpTypes.StoreCart | null }) {
+  const itemsLength = cart?.items?.length;
+  if (!itemsLength) return;
+
+  return (
+    <div className="bg-primary text-primary-foreground pointer-events-none absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full">
+      <span className="text-xs">{itemsLength}</span>
     </div>
   );
 }

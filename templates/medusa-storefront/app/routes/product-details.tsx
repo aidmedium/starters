@@ -1,5 +1,7 @@
 import { Link } from "react-router";
 
+import type { HttpTypes } from "@medusajs/types";
+
 import { Heading, Paragraph } from "@/components/ui/text";
 
 import { CACHE_HEADERS } from "@/lib/constants";
@@ -24,27 +26,33 @@ export function headers() {
 export default function ProductDetails({ loaderData }: Route.ComponentProps) {
   const { product } = loaderData;
 
-  if (!product) return <>{/*404 product component*/}Not found</>;
-
   return (
     <div className="space-y-6">
       <div>
         <Link to="/">Go back</Link>
       </div>
 
-      <div className="flex w-fit flex-col gap-2">
-        <img
-          src={product.thumbnail ?? "/placeholder.svg"}
-          className="size-20 rounded-md object-cover"
-        />
-        <Heading variant="h4">{product.title}</Heading>
-        <Paragraph>{product.description}</Paragraph>
-        <Heading variant="h4">
-          <ProductPrice product={product} />
-        </Heading>
+      <ProductInfo product={product} />
+    </div>
+  );
+}
 
-        <ProductActions product={product} />
-      </div>
+function ProductInfo({ product }: { product: HttpTypes.StoreProduct }) {
+  if (!product) return <>{/*404 product component*/}Not found</>;
+
+  return (
+    <div className="flex w-fit flex-col gap-2">
+      <img
+        src={product.thumbnail ?? "/placeholder.svg"}
+        className="size-20 rounded-md object-cover"
+      />
+      <Heading variant="h4">{product.title}</Heading>
+      <Paragraph>{product.description}</Paragraph>
+      <Heading variant="h4">
+        <ProductPrice product={product} />
+      </Heading>
+
+      <ProductActions product={product} />
     </div>
   );
 }
