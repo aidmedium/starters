@@ -4,5 +4,6 @@ export default [
   layout("./routes/main-layout.tsx", [
     index("./routes/home.tsx"),
     route("/products/:handle", "./routes/product-details.tsx"),
+    route("/cart", "./routes/cart.tsx"),
   ]),
 ] satisfies RouteConfig;

@@ -39,7 +39,9 @@ export default function ProductDetails({ loaderData }: Route.ComponentProps) {
         />
         <Heading variant="h4">{product.title}</Heading>
         <Paragraph>{product.description}</Paragraph>
-        <ProductPrice product={product} />
+        <Heading variant="h4">
+          <ProductPrice product={product} />
+        </Heading>
 
         <ProductActions product={product} />
       </div>

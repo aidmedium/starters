@@ -7,8 +7,12 @@ import {
   isRouteErrorResponse,
 } from "react-router";
 
+import { QueryProvider } from "@/components/query-provider";
+import { Toaster } from "@/components/ui/sonner";
+
+import styles from "@/app.css?url";
+
 import type { Route } from "./+types/root";
-import styles from "./app.css?url";
 
 export const links: Route.LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
@@ -30,6 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster />
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -38,7 +43,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <QueryProvider>
+      <Outlet />
+    </QueryProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
